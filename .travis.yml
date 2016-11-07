@@ -2,7 +2,8 @@ sudo: required
 language: python
 python:
   - "3.5"
-# command to install dependencies
-install: "pip install pytest pytest-cov"
-# command to run tests
+install:
+  - pip install pytest pytest-cov
+  - pip install coveralls
 script: pytest
+after_success: coveralls
