@@ -13,6 +13,3 @@ def test_get_files_in_dir():
 
   assert len(files) == 1
   assert files[0] == './test-dir/test_file.txt'
-
-def test_main():
-  file_watcher.main()
