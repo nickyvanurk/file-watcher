@@ -8,5 +8,11 @@ def test_get_command_line_args():
   assert args['extensions'] == '*'
   assert args['commands'] == 'make'
 
+def test_get_files_in_dir():
+  files = file_watcher.get_files_in_dir('./test-dir');
+
+  assert len(files) == 1
+  assert files[0] == './test-dir/test_file.txt'
+
 def test_main():
   file_watcher.main()

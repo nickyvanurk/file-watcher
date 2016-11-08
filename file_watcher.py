@@ -1,4 +1,4 @@
-import collections, argparse
+import contextlib, time, os, collections, argparse
 
 def get_command_line_args():
   defaults = {'path': '.', 'filename': None,'extensions': '*', 'commands': 'make'}
@@ -13,8 +13,20 @@ def get_command_line_args():
 
   return collections.ChainMap(command_line_args, defaults)
 
+def get_files_in_dir(path):
+  file_list = []
+  for dir_name, subdirs, files in os.walk(path):
+    for file in files:
+      file_list.append(os.path.join(dir_name, file))
+  return file_list
+
 def main():
   args = get_command_line_args()
 
+  while True:
+    files = get_files_in_dir(args['path']);
+    time.sleep(1)
+
 if __name__ == '__main__':
-  main()
+  with contextlib.suppress(KeyboardInterrupt):
+    main()
