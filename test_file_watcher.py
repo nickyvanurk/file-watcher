@@ -1,4 +1,4 @@
-import file_watcher
+import os, file_watcher
 
 def test_get_command_line_args():
   args = file_watcher.get_command_line_args()
@@ -18,14 +18,14 @@ def test_get_file_last_mod():
   pathname = './test-dir/test_file.txt'
   last_mod_time = file_watcher.get_file_last_mod(pathname)
 
-  assert last_mod_time == 1478643910
+  assert last_mod_time == os.stat(pathname)[8]
 
 def test_get_files_last_mod():
   files = file_watcher.get_files_in_dir('./test-dir')
   files_last_mod = file_watcher.get_files_last_mod(files)
 
   assert len(files_last_mod) == 1
-  assert files_last_mod[0] == 1478643910
+  assert files_last_mod[0] == os.stat(files[0])[8]
 
 def test_get_files_data():
   pathname = './test-dir'
@@ -33,4 +33,4 @@ def test_get_files_data():
 
   assert len(files_data) == 1
   assert list(files_data.keys())[0] == './test-dir/test_file.txt'
-  assert list(files_data.values())[0] == 1478643910
+  assert list(files_data.values())[0] == os.stat('./test-dir/test_file.txt')[8]
