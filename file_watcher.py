@@ -18,14 +18,43 @@ def get_files_in_dir(path):
   for dir_name, subdirs, files in os.walk(path):
     for file in files:
       file_list.append(os.path.join(dir_name, file))
+
   return file_list
+
+def get_file_last_mod(path):
+  return os.stat(path)[8];
+
+def get_files_last_mod(files):
+  files_last_mod = []
+  for file_path in files:
+    file_last_mod = get_file_last_mod(file_path)
+    files_last_mod.append(file_last_mod)
+
+  return files_last_mod
+
+def get_files_data(path):
+  files = get_files_in_dir(path)
+  files_last_mod = get_files_last_mod(files)
+
+  return dict(zip(files, files_last_mod))
 
 def main():
   args = get_command_line_args()
+  path = args['path']
+
+  files_data = get_files_data(path)
 
   while True:
-    files = get_files_in_dir(args['path']);
     time.sleep(1)
+
+    temp = get_files_data(path)
+    unshared_items = set(files_data.items()) ^ set(temp.items())
+
+    if len(unshared_items) != 0:
+      filename = unshared_items.pop()[0]
+      print(filename)
+
+    files_data = get_files_data(path)
 
 if __name__ == '__main__':
   with contextlib.suppress(KeyboardInterrupt):
