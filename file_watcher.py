@@ -52,7 +52,12 @@ def main():
 
     if len(unshared_items) != 0:
       filename = unshared_items.pop()[0]
-      print(filename)
+      file_ext = filename.split('.')[-1]
+
+      if (filename == args['filename'] or
+          '*' == args['extensions'] or
+          file_ext in args['extensions']):
+        os.system(args['commands'])
 
     files_data = get_files_data(path)
 
