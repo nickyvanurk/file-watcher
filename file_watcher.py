@@ -5,9 +5,9 @@ def get_command_line_args():
   defaults = {'path': '.', 'filename': None,'extensions': '*', 'commands': 'make'}
 
   parser = argparse.ArgumentParser()
-  parser.add_argument('-p', dest='path', help='path of the directory tree to watch')
-  parser.add_argument('-f', dest='filename', help='path of the file to watch')
-  parser.add_argument('-e', dest='extensions', help='extentions to watch')
+  parser.add_argument('-p', dest='path', help='path of directory tree to watch')
+  parser.add_argument('-f', dest='filename', help='path of file to watch')
+  parser.add_argument('-e', dest='extensions', help='extensions to watch')
   parser.add_argument('-c', dest='commands', help='commands to execute')
   namespace = parser.parse_args()
   command_line_args = {k:v for k, v in vars(namespace).items() if v}
