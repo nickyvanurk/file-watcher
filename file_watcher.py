@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import contextlib, time, os, collections, argparse
 
 def get_command_line_args():
