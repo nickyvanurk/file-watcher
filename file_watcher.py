@@ -2,13 +2,14 @@
 import contextlib, time, os, collections, argparse
 
 def get_command_line_args():
-  defaults = {'path': '.', 'filename': None,'extensions': '*', 'commands': 'make'}
+  defaults = {'path': '.', 'filename': None,'extensions': '*', 'commands': 'make', 'interval': '500'}
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', dest='path', help='path of directory tree to watch')
   parser.add_argument('-f', dest='filename', help='path of file to watch')
   parser.add_argument('-e', dest='extensions', help='extensions to watch')
   parser.add_argument('-c', dest='commands', help='commands to execute')
+  parser.add_argument('-i', dest='interval', help='interval in milliseconds')
   namespace = parser.parse_args()
   command_line_args = {k:v for k, v in vars(namespace).items() if v}
 
@@ -46,7 +47,7 @@ def main():
   files_data = get_files_data(path)
 
   while True:
-    time.sleep(1)
+    time.sleep(int(args['interval']) / 1000)
 
     temp = get_files_data(path)
     unshared_items = set(files_data.items()) ^ set(temp.items())
