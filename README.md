@@ -17,3 +17,4 @@ Optional arguments (with default values):
     -f        path of file to watch
     -e  *     extensions to watch
     -c  make  commands to execute
+    -i  500   interval in milliseconds
