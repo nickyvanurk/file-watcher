@@ -5,6 +5,9 @@
 
 Monitors a directory tree for file changes and executes specified commands when an update is detected.
 
+## Requirements
+* Python 3
+
 ## Usage
 * Allow the script to be executed: `chmod +x file_watcher.py`
 * Run the script: `./file_wachter.py`
