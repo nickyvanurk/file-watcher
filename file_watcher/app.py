@@ -1,19 +1,36 @@
 #!/usr/bin/python3
-import contextlib, time, os, collections, argparse
+import contextlib
+import time
+import os
+import collections
+import argparse
+import click
 
-def get_command_line_args():
-  defaults = {'path': '.', 'filename': None,'extensions': '*', 'commands': 'make', 'interval': '500'}
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-p', dest='path', help='path of directory tree to watch')
-  parser.add_argument('-f', dest='filename', help='path of file to watch')
-  parser.add_argument('-e', dest='extensions', help='extensions to watch')
-  parser.add_argument('-c', dest='commands', help='commands to execute')
-  parser.add_argument('-i', dest='interval', help='interval in milliseconds')
-  namespace = parser.parse_args()
-  command_line_args = {k:v for k, v in vars(namespace).items() if v}
+@click.command()
+@click.option('--path', '-p',  default='.', help='Path of directory tree to watch.')
+@click.option('--file', '-f', default=None, help='Path of file to watch.')
+@click.option('--exts', '-e', default='*', help='Extensions to watch.')
+@click.option('--cmds', '-c', default='make', help='Commands to execute.')
+@click.option('--interval', '-i', default=500, help='Scan interval in milliseconds.')
+def main(path, file, exts, cmds, interval):
+  files_data = get_files_data(path)
 
-  return collections.ChainMap(command_line_args, defaults)
+  while True:
+    time.sleep(int(interval) / 1000)
+
+    temp = get_files_data(path)
+    unshared_items = set(files_data.items()) ^ set(temp.items())
+
+    if len(unshared_items) != 0:
+      filename = unshared_items.pop()[0]
+      file_ext = filename.split('.')[-1]
+
+      if filename == file or '*' == exts or file_ext in exts:
+        os.system(cmds)
+
+    files_data = get_files_data(path)
+
 
 def get_files_in_dir(path):
   file_list = []
@@ -23,8 +40,10 @@ def get_files_in_dir(path):
 
   return file_list
 
+
 def get_file_last_mod(path):
   return os.stat(path)[8];
+
 
 def get_files_last_mod(files):
   files_last_mod = []
@@ -34,34 +53,13 @@ def get_files_last_mod(files):
 
   return files_last_mod
 
+
 def get_files_data(path):
   files = get_files_in_dir(path)
   files_last_mod = get_files_last_mod(files)
 
   return dict(zip(files, files_last_mod))
 
-def main():
-  args = get_command_line_args()
-  path = args['path']
-
-  files_data = get_files_data(path)
-
-  while True:
-    time.sleep(int(args['interval']) / 1000)
-
-    temp = get_files_data(path)
-    unshared_items = set(files_data.items()) ^ set(temp.items())
-
-    if len(unshared_items) != 0:
-      filename = unshared_items.pop()[0]
-      file_ext = filename.split('.')[-1]
-
-      if (filename == args['filename'] or
-          '*' == args['extensions'] or
-          file_ext in args['extensions']):
-        os.system(args['commands'])
-
-    files_data = get_files_data(path)
 
 if __name__ == '__main__':
   with contextlib.suppress(KeyboardInterrupt):
