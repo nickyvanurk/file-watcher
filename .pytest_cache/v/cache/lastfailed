@@ -1,5 +1,0 @@
-{
-  "file-watcher/tests/test_app.py": true,
-  "file_watcher/tests/test_app.py::test_get_command_line_args": true,
-  "tests/test_app.py": true
-}
