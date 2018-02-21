@@ -1,0 +1,5 @@
+# Testing and static analysis.
+pytest==3.4
+pytest-cov==2.5.1
+flake8==3.5.0
+testfixtures==5.4.0
