@@ -14,6 +14,16 @@ import click
 @click.option('--interval', '-i', default=500,
               help='Scan interval in milliseconds.')
 def main(path, file, exts, cmds, interval):
+    """
+    Monitor files and execute specified commands when a change is detected.
+
+    :param path: Path to folder
+    :param file: Path to file
+    :param exts: Extensions to watch
+    :param cmds: Commands to execute
+    :param interval: Scanning interval
+    :return: None
+    """
     files_data = get_files_data(path)
 
     while True:
@@ -33,28 +43,45 @@ def main(path, file, exts, cmds, interval):
 
 
 def get_files_in_dir(path):
-    file_list = []
-    for dir_name, subdirs, files in os.walk(path):
-        for file in files:
-            file_list.append(os.path.join(dir_name, file))
+    """
+    Return a list containing all the filesnames in given directory.
 
-    return file_list
+    :param path: Path to folder
+    :return: List containing filenames
+    """
+    return [os.path.join(dir_name, file)
+            for dir_name, subdirs, files in os.walk(path)
+            for file in files]
 
 
 def get_file_last_mod(path):
+    """
+    Return the 'last modified' file property.
+
+    :param path: Path to folder
+    :return: 'Last modified' file property
+    """
     return os.stat(path)[8]
 
 
 def get_files_last_mod(files):
-    files_last_mod = []
-    for file_path in files:
-        file_last_mod = get_file_last_mod(file_path)
-        files_last_mod.append(file_last_mod)
+    """
+    Return a list containing the 'last modified' properties of the files.
 
-    return files_last_mod
+    :param files: List containing filenames
+    :return: List containing 'last modified' properties
+    """
+    return [get_file_last_mod(file_path) for file_path in files]
 
 
 def get_files_data(path):
+    """
+    Return a dictionary containing filenames and their corresponding
+    'last modified' property.
+
+    :param path: Path to folder
+    :return: Dictionary containing filenames and 'last modified' properties
+    """
     files = get_files_in_dir(path)
     files_last_mod = get_files_last_mod(files)
 
