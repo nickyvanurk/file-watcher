@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/nickyvanurk/file-watcher.svg?branch=master)](https://travis-ci.org/nickyvanurk/file-watcher)
 [![Coverage Status](https://coveralls.io/repos/github/nickyvanurk/file-watcher/badge.svg?branch=master)](https://coveralls.io/github/nickyvanurk/file-watcher?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/76e3d952e916258f689e/maintainability)](https://codeclimate.com/github/nickyvanurk/file-watcher/maintainability)
 
 Monitors a directory tree for file changes and executes specified commands when an update is detected.
 
