@@ -32,7 +32,7 @@ def main(path, file, exts, cmds, interval):
         temp = get_files_data(path)
         unshared_items = set(files_data.items()) ^ set(temp.items())
 
-        if len(unshared_items) != 0:
+        if len(unshared_items):
             filename = unshared_items.pop()[0]
             file_ext = filename.split('.')[-1]
 
@@ -54,26 +54,6 @@ def get_files_in_dir(path):
             for file in files]
 
 
-def get_file_last_mod(path):
-    """
-    Return the 'last modified' file property.
-
-    :param path: Path to folder
-    :return: 'Last modified' file property
-    """
-    return os.stat(path)[8]
-
-
-def get_files_last_mod(files):
-    """
-    Return a list containing the 'last modified' properties of the files.
-
-    :param files: List containing filenames
-    :return: List containing 'last modified' properties
-    """
-    return [get_file_last_mod(file_path) for file_path in files]
-
-
 def get_files_data(path):
     """
     Return a dictionary containing filenames and their corresponding
@@ -83,7 +63,7 @@ def get_files_data(path):
     :return: Dictionary containing filenames and 'last modified' properties
     """
     files = get_files_in_dir(path)
-    files_last_mod = get_files_last_mod(files)
+    files_last_mod = [os.stat(file_path)[8] for file_path in files]
 
     return dict(zip(files, files_last_mod))
 
